@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Button, Typography, Tabs, Image } from 'antd'
+import { Button, Typography, Tabs, Image, Modal } from 'antd'
 import { WechatIcon } from './components/WechatIcon'
 import { PhoneLoginForm } from './components/PhoneLoginForm'
 import { PasswordLoginForm } from './components/PasswordLoginForm'
 import Copyright from '@/components/Copyright'
+import WeChatLogin from '@/pages/Login/components/WeChatLogin'
 
 const { Title, Text } = Typography
 
 export default function LoginPage() {
+  const [isWechat, setIsWechat] = useState(false)
+
   return (
     <div className="min-h-screen flex ">
       {/* 左侧插画部分 */}
@@ -44,6 +47,7 @@ export default function LoginPage() {
           </Title>
           <Text className="block text-center text-sm text-gray-600 mb-8">首次登录将自动创建账号</Text>
           <Tabs
+            className="h-2/5"
             defaultActiveKey="phone"
             centered
             items={[
@@ -78,6 +82,7 @@ export default function LoginPage() {
             </div>
           </div>
           <Button
+            onClick={() => setIsWechat(true)}
             icon={<WechatIcon className="w-5 h-5 mr-2" />}
             style={{ width: '100%', borderColor: '#4CAF50', color: '#4CAF50' }}
           >
@@ -88,6 +93,18 @@ export default function LoginPage() {
           <Copyright />
         </div>
       </div>
+      <Modal
+        keyboard
+        centered
+        closable
+        width={400}
+        open={isWechat}
+        footer={null}
+        onCancel={() => setIsWechat(false)}
+        onClose={() => setIsWechat(false)}
+      >
+        <WeChatLogin />
+      </Modal>
     </div>
   )
 }
