@@ -1,0 +1,22 @@
+#root{
+    --color-primary: #2563EB; /* 主要蓝色 */
+    --color-primary-light: #60A5FA; /* 亮蓝，用于悬停状态或次要元素 */
+    --color-primary-dark: #1E40AF; /* 深蓝，用于文字或强调重要性 */
+
+    --color-success: #10B981; /* 成功绿，用于正面反馈 */
+    --color-warning: #FBBF24; /* 警告黄，用于警告信息 */
+    --color-error: #EF4444; /* 错误红，用于错误信息 */
+
+    --color-gray-light: #E5E7EB; /* 浅灰，用于背景或不重要的元素 */
+    --color-gray-dark: #374151; /* 深灰，用于文字或边框 */
+}
+
+
+
+.link{
+    cursor: pointer;
+    color: var(--color-primary);
+}
+.link:hover{
+    color: var(--color-primary-light);
+}

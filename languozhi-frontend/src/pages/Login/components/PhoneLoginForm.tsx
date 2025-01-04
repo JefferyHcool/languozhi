@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Input, Button, Form, message } from 'antd'
+import { Input, Button, Form, message, Radio, Checkbox } from 'antd'
 
 export const PhoneLoginForm: React.FC = () => {
   const [form] = Form.useForm()
@@ -59,14 +59,12 @@ export const PhoneLoginForm: React.FC = () => {
         </Input.Group>
       </Form.Item>
       <Form.Item>
-        <Button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          style={{ width: '100%', backgroundColor: '#2563EB', borderColor: '#2563EB' }}
-        >
+        <Button size="large" type="primary" htmlType="submit" style={{ width: '100%' }}>
           登录
         </Button>
+      </Form.Item>
+      <Form.Item>
+        <Checkbox className=" text-gray-600">自动登录</Checkbox>
       </Form.Item>
     </Form>
   )

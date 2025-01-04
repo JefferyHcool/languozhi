@@ -1,6 +1,7 @@
 import React from 'react'
-import { Input, Button, Form } from 'antd'
-
+import { Input, Button, Form, Typography, Radio, Checkbox } from 'antd'
+const { Title, Text } = Typography
+import '@/assets/global.css'
 export const PasswordLoginForm: React.FC = () => {
   const [form] = Form.useForm()
 
@@ -18,14 +19,15 @@ export const PasswordLoginForm: React.FC = () => {
         <Input.Password size="large" placeholder="请输入密码" />
       </Form.Item>
       <Form.Item>
-        <Button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          style={{ width: '100%', backgroundColor: '#2563EB', borderColor: '#2563EB' }}
-        >
+        <div className="block mb-3">
+          <a className=" text-left  text-sm text-gray-600 link">忘记密码？</a>
+        </div>
+        <Button className={'btn'} size="large" type="primary" htmlType="submit" style={{ width: '100%' }}>
           登录
         </Button>
+      </Form.Item>
+      <Form.Item>
+        <Checkbox className=" text-gray-600">自动登录</Checkbox>
       </Form.Item>
     </Form>
   )

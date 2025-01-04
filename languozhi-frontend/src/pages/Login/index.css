@@ -1,0 +1,5 @@
+#container{
+    background: url("src/assets/Mask group 1.png"),#EFF5FF; /* 纹理图片和背景颜色 */
+    background-blend-mode: multiply;
+    background-size: cover; /* 图片填充整个容器 */
+}
