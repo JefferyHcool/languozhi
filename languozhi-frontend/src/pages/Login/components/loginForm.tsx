@@ -3,8 +3,9 @@ import { PhoneLoginForm } from '@/pages/Login/components/PhoneLoginForm'
 import { PasswordLoginForm } from '@/pages/Login/components/PasswordLoginForm'
 import { WechatIcon } from '@/pages/Login/components/WechatIcon'
 import Copyright from '@/components/Copyright'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import WeChatLogin from '@/pages/Login/components/WeChatLogin'
+import { getCaptcha } from '@/services/userAuth'
 const { Title, Text } = Typography
 interface IProps {
   showLogo?: boolean
@@ -14,7 +15,7 @@ const LoginForm: FC<IProps> = ({ showLogo }) => {
 
   return (
     <>
-      <div className="w-full max-w-md shadow-lg bg-white p-10 rounded-xl">
+      <div className="w-full max-w-md shadow-lg bg-white p-10 mb-20 rounded-xl">
         <div className="flex justify-center mb-8">
           {showLogo ? (
             <Image
@@ -41,7 +42,7 @@ const LoginForm: FC<IProps> = ({ showLogo }) => {
               key: 'phone',
               label: '短信验证码登录',
               children: (
-                <div style={{ minHeight: '230px' }}>
+                <div style={{ minHeight: '280px' }}>
                   <PhoneLoginForm />
                 </div>
               )
@@ -50,7 +51,7 @@ const LoginForm: FC<IProps> = ({ showLogo }) => {
               key: 'password',
               label: '账号密码登录',
               children: (
-                <div style={{ minHeight: '230px' }}>
+                <div style={{ minHeight: '280px' }}>
                   {' '}
                   <PasswordLoginForm />{' '}
                 </div>
