@@ -1,22 +1,49 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input, Button, Form, message, Radio, Checkbox } from 'antd'
+import { getCaptcha, loginWithAccount, loginWithPhone, sendVerificationCode } from '@/services/userAuth'
 
 export const PhoneLoginForm: React.FC = () => {
   const [form] = Form.useForm()
   const [isSendingCode, setIsSendingCode] = useState(false)
   const [countdown, setCountdown] = useState(0)
+  const [captchaImage, setCaptchaImage] = useState<string>('')
+  const [captchakey, setCaptchakey] = useState('')
+  useEffect(() => {
+    fetchCaptcha()
+  }, [])
 
+  const fetchCaptcha = () => {
+    getCaptcha().then(res => {
+      console.log(res)
+      setCaptchaImage(res.captcha_image)
+      setCaptchakey(res.captcha_key)
+    })
+  }
   const handleSendCode = async () => {
     try {
-      await form.validateFields(['phone'])
+      await form.validateFields(['phone', 'captcha'])
+
       const phone = form.getFieldValue('phone')
-      setIsSendingCode(true)
+      const captcha = form.getFieldValue('captcha')
       // 这里应该调用发送验证码的API
-      // await sendVerificationCode(phone)
-      message.success('验证码已发送')
-      setCountdown(60)
+      try {
+        const res = await sendVerificationCode({ phone_number: phone, captcha_key: captchakey, captcha_value: captcha })
+        console.log('发送结果', res)
+        if (res) {
+          setIsSendingCode(true)
+          message.success('验证码发送成功')
+          setCountdown(60)
+        } else {
+          return
+        }
+      } catch (error) {
+        console.log('发送失败', error)
+        message.error('发送失败' + error)
+        return
+      }
+
       const timer = setInterval(() => {
         setCountdown(prevCountdown => {
           if (prevCountdown <= 1) {
@@ -28,12 +55,30 @@ export const PhoneLoginForm: React.FC = () => {
         })
       }, 1000)
     } catch (error) {
-      message.error('请输入有效的手机号码')
+      // @ts-ignore
+      if (error && error.errorFields) {
+        // @ts-ignore
+        error.errorFields.forEach(field => {
+          message.error(field.errors[0])
+        })
+      } else {
+        message.error('请求失败')
+      }
     }
   }
 
   const handleSubmit = async (values: any) => {
     console.log('登录信息', values)
+    try {
+      await form.validateFields(['phone', 'captcha', 'code'])
+      await loginWithPhone({
+        phone_number: values.phone,
+        verification_code: values.code
+      })
+    } catch (error) {
+      console.log('登录失败', error)
+      message.error('请求失败')
+    }
     // 这里应该调用验证登录的API
   }
 
@@ -47,6 +92,17 @@ export const PhoneLoginForm: React.FC = () => {
         ]}
       >
         <Input size="large" placeholder="请输入手机号码" />
+      </Form.Item>
+      <Form.Item name="captcha" rules={[{ required: true, message: '请输入验证码' }]}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Input size="large" placeholder="请输入验证码" style={{ flex: 1 }} />
+          <img
+            src={captchaImage} // 验证码图片
+            alt="验证码"
+            style={{ marginLeft: '10px', cursor: 'pointer', height: '40px' }}
+            onClick={fetchCaptcha} // 点击刷新验证码
+          />
+        </div>
       </Form.Item>
       <Form.Item>
         <Input.Group compact>

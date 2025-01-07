@@ -47,7 +47,7 @@ service.interceptors.response.use(
     const res = response.data
     if (res.code !== 0) {
       // console.error('接口错误：', res.msg)
-      return Promise.resolve(res.msg)
+      return Promise.reject(res.msg)
     }
     return res.data // 返回实际数据
   },

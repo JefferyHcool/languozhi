@@ -54,3 +54,30 @@ export const getPublicKey = async () => {
     console.error('获取公钥失败：', err)
   }
 }
+
+export const sendVerificationCode = async (data: {
+  phone_number: string
+  captcha_key: string
+  captcha_value: string
+}) => {
+  data['captcha_value'] = await encryptData(data['captcha_value'])
+
+  return await request.post('api/users/auth/login/sms', data)
+}
+
+export const loginWithPhone = async (data: { phone_number: string; verification_code: string }) => {
+  data['verification_code'] = await encryptData(data['verification_code'])
+  return await request.post('api/users/auth/login_with_phone', data).then(res => {
+    if (res && res.user_info) {
+      localStorage.setItem('token', res.access_token)
+      localStorage.setItem('access_token', res.access_token)
+      localStorage.setItem('refresh_token', res.refresh_token)
+      localStorage.setItem('user_info', JSON.stringify(res.user_info))
+      message.success('登录成功')
+      return Promise.resolve(res)
+    }
+
+    message.error('登录失败：' + res)
+    return Promise.reject(res)
+  })
+}
