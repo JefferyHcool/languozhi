@@ -3,28 +3,21 @@ import { Input, Button, Form, Typography, Radio, Checkbox } from 'antd'
 const { Title, Text } = Typography
 import '@/assets/global.css'
 import { getCaptcha, loginWithAccount } from '@/services/userAuth'
-export const PasswordLoginForm: React.FC = () => {
+interface IProps {
+  captchaImage: string
+  captchaKey: string
+  fetchCaptcha: () => void
+}
+export const PasswordLoginForm: React.FC<IProps> = ({ captchaImage, captchaKey, fetchCaptcha }) => {
   const [form] = Form.useForm()
-  const [captchaImage, setCaptchaImage] = useState<string>('')
-  const [captchakey, setCaptchakey] = useState('')
-  useEffect(() => {
-    fetchCaptcha()
-  }, [])
 
-  const fetchCaptcha = () => {
-    getCaptcha().then(res => {
-      console.log(res)
-      setCaptchaImage(res.captcha_image)
-      setCaptchakey(res.captcha_key)
-    })
-  }
   const handleSubmit = async (values: any) => {
     console.log('登录信息', values)
     // 这里应该调用验证登录的API
     const res = await loginWithAccount({
       account: values.username,
       password: values.password,
-      captcha_key: captchakey,
+      captcha_key: captchaKey,
       captcha_value: values.captcha
     })
   }

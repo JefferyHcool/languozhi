@@ -1,10 +1,12 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { message } from 'antd'
 import { CodeMessage, CodeMessageIF } from '@/request/codeMessage'
+import { isRefreshToken, refreshToken } from '@/request/hepler'
+import { ResponseCode } from '@/enums/responseEnums'
 
 // 定义响应数据的通用结构
-export interface ApiResponse<T = any> {
-  code: number // 业务状态码
+export interface ApiResponse<T = any> extends AxiosResponse<T> {
+  code: ResponseCode // 业务状态码
   msg: string // 提示信息
   data: T // 数据类型
 }
@@ -18,6 +20,7 @@ const service: AxiosInstance = axios.create({
   }
 })
 
+const requestQueue: any[] = []
 // 请求拦截器
 
 service.interceptors.request.use(
@@ -25,6 +28,7 @@ service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     // 在发送请求之前做些什么
     const token = localStorage.getItem('token')
+
     if (token) {
       config.headers = {
         ...config.headers,
@@ -43,23 +47,32 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
-    // 处理响应数据
     const res = response.data
-    if (res.code !== 0) {
-      // console.error('接口错误：', res.msg)
-      return Promise.reject(res.msg)
-    }
-    return res.data // 返回实际数据
+
+    return Promise.resolve(res)
   },
-  error => {
+  async error => {
+    console.log('error:', error)
+    if (error.response?.status === 401) {
+      if (error.response?.data?.code === ResponseCode.TOKEN_INVALID && !isRefreshToken(error.config)) {
+        const refreshRes = await refreshToken()
+        if (refreshRes.code !== ResponseCode.SUCCESS) {
+          message.error('登录过期，请重新登录')
+          return Promise.reject(error)
+        }
+        error.config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+        return await service.request(error.config)
+      }
+    }
     // 处理响应错误
+    debugger
     if (error.response) {
       const { status, data } = error.response
-      message.error(CodeMessage[status as CodeMessageIF])
+      // message.error(CodeMessage[status as CodeMessageIF])
     } else {
       console.error('请求失败：', error.message)
     }
-    return Promise.reject(error)
+    return Promise.reject(error.response)
   }
 )
 

@@ -9,6 +9,8 @@
 
     --color-gray-light: #E5E7EB; /* 浅灰，用于背景或不重要的元素 */
     --color-gray-dark: #374151; /* 深灰，用于文字或边框 */
+    --color-gray-text: #6B7280;
+    --color-background: #ffffff;
 }
 
 

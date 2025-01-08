@@ -3,24 +3,16 @@
 import React, { useEffect, useState } from 'react'
 import { Input, Button, Form, message, Radio, Checkbox } from 'antd'
 import { getCaptcha, loginWithAccount, loginWithPhone, sendVerificationCode } from '@/services/userAuth'
-
-export const PhoneLoginForm: React.FC = () => {
+interface IProps {
+  captchaImage: string
+  captchaKey: string
+  fetchCaptcha: () => void
+}
+export const PhoneLoginForm: React.FC<IProps> = ({ captchaImage, captchaKey, fetchCaptcha }) => {
   const [form] = Form.useForm()
   const [isSendingCode, setIsSendingCode] = useState(false)
   const [countdown, setCountdown] = useState(0)
-  const [captchaImage, setCaptchaImage] = useState<string>('')
-  const [captchakey, setCaptchakey] = useState('')
-  useEffect(() => {
-    fetchCaptcha()
-  }, [])
 
-  const fetchCaptcha = () => {
-    getCaptcha().then(res => {
-      console.log(res)
-      setCaptchaImage(res.captcha_image)
-      setCaptchakey(res.captcha_key)
-    })
-  }
   const handleSendCode = async () => {
     try {
       await form.validateFields(['phone', 'captcha'])
@@ -29,9 +21,9 @@ export const PhoneLoginForm: React.FC = () => {
       const captcha = form.getFieldValue('captcha')
       // 这里应该调用发送验证码的API
       try {
-        const res = await sendVerificationCode({ phone_number: phone, captcha_key: captchakey, captcha_value: captcha })
+        const res = await sendVerificationCode({ phone_number: phone, captcha_key: captchaKey, captcha_value: captcha })
         console.log('发送结果', res)
-        if (res) {
+        if (res && res.code === 0) {
           setIsSendingCode(true)
           message.success('验证码发送成功')
           setCountdown(60)

@@ -12,7 +12,19 @@ interface IProps {
 }
 const LoginForm: FC<IProps> = ({ showLogo }) => {
   const [isWechat, setIsWechat] = useState(false)
+  const [captchaImage, setCaptchaImage] = useState<string>('')
+  const [captchaKey, setCaptchaKey] = useState('')
+  useEffect(() => {
+    fetchCaptcha()
+  }, [])
 
+  const fetchCaptcha = () => {
+    getCaptcha().then(res => {
+      console.log(res)
+      setCaptchaImage(res.captcha_image)
+      setCaptchaKey(res.captcha_key)
+    })
+  }
   return (
     <>
       <div className="w-full max-w-md shadow-lg bg-white p-10 mb-20 rounded-xl">
@@ -43,7 +55,7 @@ const LoginForm: FC<IProps> = ({ showLogo }) => {
               label: '短信验证码登录',
               children: (
                 <div style={{ minHeight: '280px' }}>
-                  <PhoneLoginForm />
+                  <PhoneLoginForm captchaImage={captchaImage} captchaKey={captchaKey} fetchCaptcha={fetchCaptcha} />
                 </div>
               )
             },
@@ -53,7 +65,11 @@ const LoginForm: FC<IProps> = ({ showLogo }) => {
               children: (
                 <div style={{ minHeight: '280px' }}>
                   {' '}
-                  <PasswordLoginForm />{' '}
+                  <PasswordLoginForm
+                    captchaImage={captchaImage}
+                    captchaKey={captchaKey}
+                    fetchCaptcha={fetchCaptcha}
+                  />{' '}
                 </div>
               )
             }
