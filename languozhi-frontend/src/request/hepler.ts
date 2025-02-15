@@ -18,14 +18,19 @@ export const refreshToken = async () => {
         isRefreshToken: true
       }
     )
+    console.log('刷新结果', res)
     if (res && res.data) {
       const { access_token, refresh_token } = res.data
       localStorage.setItem('token', access_token)
       localStorage.setItem('access_token', access_token)
       localStorage.setItem('refresh_token', refresh_token)
       resolve(res)
+    } else {
+      localStorage.removeItem('token')
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('refresh_token')
+      reject(res)
     }
-    reject(res)
   })
   promise.finally(() => {
     // @ts-ignore

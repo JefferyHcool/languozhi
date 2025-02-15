@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Input, Button, Form, message, Radio, Checkbox } from 'antd'
+import { Input, Button, Form, message, Radio, Checkbox, Spin } from 'antd'
 import { getCaptcha, loginWithAccount, loginWithPhone, sendVerificationCode } from '@/services/userAuth'
 interface IProps {
   captchaImage: string
@@ -88,12 +88,18 @@ export const PhoneLoginForm: React.FC<IProps> = ({ captchaImage, captchaKey, fet
       <Form.Item name="captcha" rules={[{ required: true, message: '请输入验证码' }]}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Input size="large" placeholder="请输入验证码" style={{ flex: 1 }} />
-          <img
-            src={captchaImage} // 验证码图片
-            alt="验证码"
-            style={{ marginLeft: '10px', cursor: 'pointer', height: '40px' }}
-            onClick={fetchCaptcha} // 点击刷新验证码
-          />
+          {captchaImage ? (
+            <img
+              src={captchaImage} // 验证码图片
+              alt="验证码"
+              style={{ marginLeft: '10px', cursor: 'pointer', height: '40px' }}
+              onClick={fetchCaptcha} // 点击刷新验证码
+            />
+          ) : (
+            <Spin>
+              <div style={{ marginLeft: '10px', cursor: 'pointer', height: '40px' }}></div>
+            </Spin>
+          )}
         </div>
       </Form.Item>
       <Form.Item>

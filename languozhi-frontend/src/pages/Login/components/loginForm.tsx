@@ -6,6 +6,7 @@ import Copyright from '@/components/Copyright'
 import React, { FC, useEffect, useState } from 'react'
 import WeChatLogin from '@/pages/Login/components/WeChatLogin'
 import { getCaptcha } from '@/services/userAuth'
+import logo from '@/assets/logo.png'
 const { Title, Text } = Typography
 interface IProps {
   showLogo?: boolean
@@ -29,17 +30,7 @@ const LoginForm: FC<IProps> = ({ showLogo }) => {
     <>
       <div className="w-full max-w-md shadow-lg bg-white p-10 mb-20 rounded-xl">
         <div className="flex justify-center mb-8">
-          {showLogo ? (
-            <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/颜色-8g3wC8tvIEhX3ZRmBGj459sYdfcsjF.png"
-              alt="蓝果汁 Logo"
-              width={80}
-              height={80}
-              preview={false}
-            />
-          ) : (
-            ''
-          )}
+          {showLogo ? <Image src={logo} alt="蓝果汁 Logo" width={80} height={80} preview={false} /> : ''}
         </div>
         <Title level={2} style={{ textAlign: 'center', color: '#2563EB', marginBottom: '24px' }}>
           登录到蓝果汁

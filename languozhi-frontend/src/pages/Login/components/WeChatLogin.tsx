@@ -1,20 +1,51 @@
-import React, { FC } from 'react'
-import { Image, Typography } from 'antd'
+import React, { FC, useEffect, useState } from 'react'
+import { Image, message, Spin, Typography } from 'antd'
+import { getWechatQrcode } from '@/services/userAuth'
+import { millisecondsToDHMS, secondsToDHMS } from '@/utils/tools'
+
 const { Title, Text } = Typography
 
 const WeChatLogin: FC = () => {
-  return (
-    <div className="flex  flex-col items-center">
-      <div className="text-xl">微信扫码登录</div>
-      <Text className="block text-center text-sm text-gray-600 mt-6">请使用微信移动端扫描二维码</Text>
+  const [qrCode, setQrCode] = useState('')
+  const [countdown, setCountdown] = useState(0)
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
+  const [mask, setMask] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-      <Image
-        preview={false}
-        height={200}
-        src={
-          'data:image/png;base64,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'
-        }
-      ></Image>
+  const getQrCode = async () => {
+    const res = await getWechatQrcode()
+    if (res && res.code != 0) {
+      setMask(false)
+      message.error('获取二维码失败')
+      return
+    }
+    if (res && res.data && res.data.expire_seconds) {
+      setQrCode(res.data.image_data)
+    }
+  }
+
+  useEffect(() => {
+    getQrCode()
+  }, [])
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="text-xl">微信扫码登录</div>
+      <Text className="block text-center text-sm text-gray-600 mt-6">微信扫码关注【蓝果汁AI】即可快速登录</Text>
+      {/* <Text className="block text-center text-sm text-gray-600 mt-2"> */}
+      {/*  二维码有效期 <span className="text-red-600">{secondsToDHMS(countdown, 'minute')}</span> */}
+      {/* </Text> */}
+      <div className="overflow-hidden" style={{ width: '200px', height: '200px' }}>
+        {!qrCode ? (
+          <Spin>
+            <div style={{ width: '200px', height: '200px' }}></div>
+          </Spin>
+        ) : (
+          <div>
+            <Image preview={false} height={200} src={qrCode} />
+          </div>
+        )}
+      </div>
       <Text className="block text-center text-sm text-gray-600 mt-6">
         扫码登录即表示您同意我们的{' '}
         <a href="#" className="text-blue-600 hover:underline">
@@ -28,4 +59,5 @@ const WeChatLogin: FC = () => {
     </div>
   )
 }
+
 export default WeChatLogin

@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 import { Typography, Image } from 'antd'
 import Copyright from '@/components/Copyright'
 import './index.css'
+import AnimationBanner from '@/pages/Login/components/AnimationBanner'
 const { Title, Text } = Typography
 
 interface IProps {
@@ -17,7 +18,7 @@ const AuthSplitLayout: FC<IProps> = ({ children, title, subtitle, slogan, imageU
   return (
     <div className="min-h-screen relative flex" id="container">
       {/* 左侧插画部分 */}
-      <div className="w-3/4 hidden lg:flex flex-col justify-center items-center p-12">
+      <div className="w-3/4 hidden lg:flex flex-col justify-around items-center p-12">
         <div className="block w-full flex flex-col justify-items-start">
           <div className="flex items-center mb-4">
             <Text className="font-bold text-2xl" style={{ color: '#2563EB' }}>
@@ -33,14 +34,15 @@ const AuthSplitLayout: FC<IProps> = ({ children, title, subtitle, slogan, imageU
           </Text>
         </div>
         <div className="backdrop-blur-xl rounded-2xl bg-opacity-20">
-          <Image
-            src={imageUrl || 'https://via.placeholder.com/800'}
-            alt="插图"
-            width={800}
-            height={800}
-            className="mb-8"
-            preview={false}
-          />
+          {/* <Image */}
+          {/*  src={imageUrl || 'https://via.placeholder.com/800'} */}
+          {/*  alt="插图" */}
+          {/*  width={800} */}
+          {/*  height={800} */}
+          {/*  className="mb-8" */}
+          {/*  preview={false} */}
+          {/* /> */}
+          <AnimationBanner></AnimationBanner>
         </div>
       </div>
 

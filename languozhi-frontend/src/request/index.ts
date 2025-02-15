@@ -68,6 +68,12 @@ service.interceptors.response.use(
     debugger
     if (error.response) {
       const { status, data } = error.response
+      console.log('error:', error.response.status)
+      if (status === 401 && isRefreshToken(error.config)) {
+        message.error('登录过期，请重新登录')
+        localStorage.clear()
+        return await service.request(error.config)
+      }
       // message.error(CodeMessage[status as CodeMessageIF])
     } else {
       console.error('请求失败：', error.message)

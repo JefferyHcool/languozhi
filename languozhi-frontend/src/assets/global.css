@@ -11,6 +11,7 @@
     --color-gray-dark: #374151; /* 深灰，用于文字或边框 */
     --color-gray-text: #6B7280;
     --color-background: #ffffff;
+    --transparent-background:rgba(255, 255, 255, 0.6)
 }
 
 

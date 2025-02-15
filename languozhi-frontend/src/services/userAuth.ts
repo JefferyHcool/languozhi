@@ -15,7 +15,9 @@ export const getCaptcha = async () => {
   )
   return Promise.resolve(res.data)
 }
-
+export const getWechatQrcode = async () => {
+  return await request.get('api/users/auth/wechat/login_qrcode')
+}
 export const loginWithAccount = async (data: {
   account: string
   password: string
