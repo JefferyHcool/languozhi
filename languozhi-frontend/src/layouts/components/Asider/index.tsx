@@ -1,12 +1,15 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Sider from 'antd/es/layout/Sider'
 import { Image, Menu, MenuProps } from 'antd'
 import { BookOpen, FileText, FolderOpen, PenTool, Clock, User, Settings } from 'lucide-react'
 import styles from './index.module.sass'
+import baseRoutes from '@/routes/base'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import AvatarBar from '@/layouts/components/AvatarBar'
 import { useMenuStore } from '@/store/menuStore'
-
+import { useLocation, useNavigate } from 'react-router-dom'
+import { iconMap } from '@/layouts/components/Asider/iconMap'
+import { RouterRecord } from '@/routes'
 interface IProps {
   children?: React.ReactNode
   showLogo?: boolean
@@ -15,13 +18,19 @@ interface IProps {
 
 const Aside: FC<IProps> = ({ children, showLogo, isCollapsed }) => {
   const collapsed = useMenuStore(state => state.collapsed)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  const onMenuClick = (e: any) => {
+    navigate(e.key)
+  }
   const mainNavItems: MenuProps['items'] = [
     {
       key: 'main1',
       type: 'group',
       label: '工作台',
       children: [
-        { key: 'sub1', icon: React.createElement(PenTool), label: '试题生成' },
+        { key: 'paper', icon: React.createElement(PenTool), label: '试题生成' },
         { key: 'sub2', icon: React.createElement(FileText), label: '试卷管理' },
         { key: 'sub3', icon: React.createElement(BookOpen), label: '题目管理' },
         { key: 'sub4', icon: React.createElement(FolderOpen), label: '资料管理' }
@@ -39,6 +48,31 @@ const Aside: FC<IProps> = ({ children, showLogo, isCollapsed }) => {
     }
   ]
 
+  const generateMenuItems = (routes: RouterRecord[]) => {
+    return routes.map(route => {
+      if (route.children && route.children.length > 0) {
+        return {
+          key: route.key,
+          label: route.name,
+          type: 'group',
+          children: route.children.map(child => ({
+            key: child.path,
+            label: child.name,
+            icon: child.icon && iconMap[child.icon] ? React.createElement(iconMap[child.icon]) : null
+          }))
+        }
+      }
+      return {
+        key: route.path,
+        label: route.name,
+        icon: route.icon && iconMap[route.icon] ? React.createElement(iconMap[route.icon]) : null
+      }
+    })
+  }
+  useEffect(() => {
+    // 假设路由 path 与菜单项 key 保持一致
+    setSelectedKeys([location.pathname])
+  }, [location.pathname])
   return (
     <div className="min-h-screen border-r border-gray-200/50  flex flex-col">
       <Sider
@@ -71,10 +105,10 @@ const Aside: FC<IProps> = ({ children, showLogo, isCollapsed }) => {
 
         <Menu
           mode="inline"
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
+          onClick={onMenuClick}
           style={{ height: '70%', borderRight: 0, background: 'transparent' }}
-          items={mainNavItems}
+          // @ts-ignore
+          items={generateMenuItems(baseRoutes)}
         />
 
         {/* 让 AvatarBar 占据剩余空间 */}
