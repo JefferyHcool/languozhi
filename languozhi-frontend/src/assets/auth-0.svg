@@ -1,23 +1,23 @@
-<svg width="1334.000000" height="800.000000" viewBox="0 0 1334 800" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="1920.000000" height="1080.000000" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<desc>
 			Created with Pixso.
 	</desc>
 	<defs>
-		<filter id="filter_3_3_dd" x="-546.000000" y="-599.000000" width="1359.000000" height="1359.000000" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+		<filter id="filter_3_3_dd" x="-503.000000" y="-476.000000" width="1348.194336" height="1301.749268" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 			<feFlood flood-opacity="0" result="BackgroundImageFix"/>
 			<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
 			<feGaussianBlur stdDeviation="100" result="effect_layerBlur_1"/>
 		</filter>
 		<clipPath id="clip3_1">
-			<rect id="auth-0" width="1334.000000" height="800.000000" fill="white" fill-opacity="0"/>
+			<rect id="auth-0" width="1920.000000" height="1080.000000" fill="white" fill-opacity="0"/>
 		</clipPath>
 	</defs>
 	<g clip-path="url(#clip3_1)">
 		<g filter="url(#filter_3_3_dd)">
-			<circle id="Ellipse 44" cx="70.123108" cy="16.188477" r="128.188004" fill="#2059E8" fill-opacity="1.000000"/>
-			<circle id="Ellipse 45" cx="115.315002" cy="144.811996" r="128.188004" fill="#559BF9" fill-opacity="1.000000"/>
-			<circle id="Ellipse 46" cx="197.877014" cy="27.486267" r="128.188004" fill="#2C5BFF" fill-opacity="1.000000"/>
-			<circle id="circle" cx="133.500000" cy="80.500000" r="379.500000" fill="#FFFFFF" fill-opacity="0.600000"/>
+			<ellipse id="Ellipse 44" cx="108.622559" cy="115.414093" rx="126.363007" ry="118.518898" fill="#1647C4" fill-opacity="1.000000"/>
+			<ellipse id="Ellipse 45" cx="153.171021" cy="234.335632" rx="126.363007" ry="118.518898" fill="#559BF9" fill-opacity="1.000000"/>
+			<ellipse id="Ellipse 46" cx="234.557617" cy="125.859741" rx="126.363007" ry="118.518898" fill="#2563EB" fill-opacity="1.000000"/>
+			<ellipse id="circle" cx="171.097168" cy="174.874634" rx="374.097137" ry="350.874634" fill="#FFFFFF" fill-opacity="0.600000"/>
 		</g>
 	</g>
 </svg>

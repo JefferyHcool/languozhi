@@ -16,7 +16,7 @@ const LeftSideLayout: FC = () => {
         <Aside showLogo={true}></Aside>
         <Layout style={{ background: 'transparent' }}>
           <HeaderComponent></HeaderComponent>
-          <Content className={'w-full h-full relative z-50 p-5 pb-2.5 overflow-y-auto'}>
+          <Content className={'relative z-50 p-5 pb-2.5 overflow-y-auto '} style={{ height: 'calc(100vh - 64px)' }}>
             <Outlet />
           </Content>
         </Layout>

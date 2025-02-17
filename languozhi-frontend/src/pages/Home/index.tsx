@@ -5,7 +5,7 @@ import bg1 from '@/assets/bg.png'
 import styles from './index.module.css'
 const HomePage: FC = () => {
   return (
-    <div className="min-h-screen overflow-hidden relative">
+    <div className=" relative">
       <div className={'absolute inset-0 ' + styles.homeContainer}></div>
       <div className={'absolute inset-0 ' + styles.backBottom}></div>
 

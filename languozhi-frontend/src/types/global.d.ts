@@ -28,3 +28,19 @@ declare module '*.less' {
   const content: Record<string, string>
   export default content
 }
+
+interface GenerateTemplate {
+  templateName: string
+  baseInfo: {
+    title: string
+    time: number
+    score: number
+  }
+  questionConfig: {
+    type: string
+    difficulty: string
+  }
+  globalConfig: {
+    model: string
+  }
+}

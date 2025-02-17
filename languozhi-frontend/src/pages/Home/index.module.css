@@ -2,14 +2,15 @@
     background-image: url("@/assets/auth-0.svg");
     background-position:0 0;
     opacity: 0.8;
-    background-size: cover;
     z-index: -1;
+    background-repeat: no-repeat;
+
 }
 .backBottom{
     background-image: url("@/assets/auth-1.svg");
     background-position:100% 100%;
     opacity: 0.75;
-    background-size: cover;
+    background-repeat: no-repeat;
     z-index: -1;
 
 }

@@ -24,29 +24,6 @@ const Aside: FC<IProps> = ({ children, showLogo, isCollapsed }) => {
   const onMenuClick = (e: any) => {
     navigate(e.key)
   }
-  const mainNavItems: MenuProps['items'] = [
-    {
-      key: 'main1',
-      type: 'group',
-      label: '工作台',
-      children: [
-        { key: 'paper', icon: React.createElement(PenTool), label: '试题生成' },
-        { key: 'sub2', icon: React.createElement(FileText), label: '试卷管理' },
-        { key: 'sub3', icon: React.createElement(BookOpen), label: '题目管理' },
-        { key: 'sub4', icon: React.createElement(FolderOpen), label: '资料管理' }
-      ]
-    },
-    {
-      key: 'sub1',
-      label: '其他',
-      type: 'group',
-      children: [
-        { key: 'sub5', icon: React.createElement(Clock), label: '最近打开' },
-        { key: 'sub6', icon: React.createElement(User), label: '我的空间' },
-        { key: 'sub7', icon: React.createElement(Settings), label: '设置' }
-      ]
-    }
-  ]
 
   const generateMenuItems = (routes: RouterRecord[]) => {
     return routes.map(route => {
@@ -71,7 +48,8 @@ const Aside: FC<IProps> = ({ children, showLogo, isCollapsed }) => {
   }
   useEffect(() => {
     // 假设路由 path 与菜单项 key 保持一致
-    setSelectedKeys([location.pathname])
+    console.log(location.pathname)
+    setSelectedKeys([String(location.pathname).replace('/', '')])
   }, [location.pathname])
   return (
     <div className="min-h-screen border-r border-gray-200/50  flex flex-col">
@@ -106,6 +84,8 @@ const Aside: FC<IProps> = ({ children, showLogo, isCollapsed }) => {
         <Menu
           mode="inline"
           onClick={onMenuClick}
+          defaultOpenKeys={selectedKeys}
+          defaultSelectedKeys={selectedKeys}
           style={{ height: '70%', borderRight: 0, background: 'transparent' }}
           // @ts-ignore
           items={generateMenuItems(baseRoutes)}
