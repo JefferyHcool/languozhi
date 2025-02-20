@@ -69,10 +69,21 @@ const questionForm: FC<ControllerProps> = ({ template, updateTemplate }) => {
 
     setSelectedTags(nextSelectedTags)
   }
-
+  const handleRadioChange = (item: any) => {
+    console.log(item.target.value)
+    if (template) {
+      updateTemplate({
+        questionConfig: {
+          type: template.questionConfig.type,
+          difficulty: item.target.value
+        }
+      })
+    }
+  }
   useEffect(() => {
     if (template) {
       setSelectedTags(template.questionConfig.type || []) // ✅ 直接更新 state
+      form.setFieldsValue({ difficulty: template?.questionConfig.difficulty || '' })
     }
   }, [template])
 
@@ -91,8 +102,17 @@ const questionForm: FC<ControllerProps> = ({ template, updateTemplate }) => {
             </Tag.CheckableTag>
           ))}
         </Form.Item>
-        <Form.Item className={'font-semibold'} label="总体题目难度" name="title" tooltip={'每题难度可点击对应属性设置'}>
-          <Radio.Group className={'font-medium'} options={difficultyLevels}></Radio.Group>
+        <Form.Item
+          className={'font-semibold'}
+          label="总体题目难度"
+          name="difficulty"
+          tooltip={'每题难度可点击对应属性设置'}
+        >
+          <Radio.Group
+            onChange={item => handleRadioChange(item)}
+            className={'font-medium'}
+            options={difficultyLevels}
+          ></Radio.Group>
         </Form.Item>
       </Form>
     </div>

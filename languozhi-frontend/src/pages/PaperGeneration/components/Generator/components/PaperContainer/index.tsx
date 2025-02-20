@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import styles from './index.module.css'
 import { Alert } from 'antd'
 import { useTemplateStore } from '@/store/templateStore'
@@ -11,6 +11,13 @@ const PaperContainer: FC = () => {
     console.log('close')
     setShowWarning(false)
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      setShowWarning(false)
+    }
+  }, [])
   return (
     <>
       {showWarning ? (

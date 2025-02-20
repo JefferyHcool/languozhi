@@ -1,19 +1,23 @@
 import React, { FC, useEffect, useState } from 'react'
-import { Affix, Button, Collapse, CollapseProps, Radio, Dropdown, MenuProps } from 'antd'
+import { Affix, Button, Collapse, CollapseProps, Radio, Dropdown, MenuProps, message, Modal } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import styles from './index.module.css'
 import BaseForm from '@/pages/PaperGeneration/components/Controller/components/BaseForm'
 import QuestionForm from '@/pages/PaperGeneration/components/Controller/components/QuestionForm'
 import GlobalForm from '@/pages/PaperGeneration/components/Controller/components/GlobalForm'
 import { useTemplateStore } from '@/store/templateStore'
-
 const index: FC = () => {
+  const [modal, contextHolder] = Modal.useModal()
+
+  const { template, createTemplate, updateTemplate, saveTemplate, isExist } = useTemplateStore()
+  const [items, setItems] = useState<CollapseProps['items']>()
   const menuItems: MenuProps['items'] = [
     {
       key: '1',
       label: '保存模板',
       onClick: () => {
-        console.log('保存模板')
+        saveTemplate()
+        message.success('保存成功')
       }
     },
     {
@@ -24,9 +28,6 @@ const index: FC = () => {
       }
     }
   ]
-  const { template, createTemplate, updateTemplate } = useTemplateStore()
-  const [items, setItems] = useState<CollapseProps['items']>()
-
   useEffect(() => {
     if (!template) {
       createTemplate()
@@ -49,7 +50,25 @@ const index: FC = () => {
       }
     ])
   }, [template])
+  const handleCreate = () => {
+    if (template) {
+      if (isExist(template.id)) {
+        saveTemplate()
+      } else {
+        modal.confirm({
+          title: '当前模板尚未保持,确定直接创建新模板吗？',
+          onOk() {
+            createTemplate()
+          },
+          onCancel() {
+            console.log('Cancel')
+          }
+        })
+      }
+    }
 
+    createTemplate()
+  }
   // 下拉菜单选项
 
   return (
@@ -78,7 +97,7 @@ const index: FC = () => {
           <Button className={'w-full'} type={'primary'}>
             生成试卷
           </Button>
-          <Button ghost={true} className={'w-full'} type={'primary'}>
+          <Button ghost={true} onClick={handleCreate} className={'w-full'} type={'primary'}>
             新建模板
           </Button>
           {/* 更多操作下拉菜单 */}

@@ -1,8 +1,14 @@
 import styles from './index.module.css'
 import Controller from '@/pages/PaperGeneration/components/Controller'
 import Generator from '@/pages/PaperGeneration/components/Generator'
+import { Drawer } from 'antd'
+import { useAttributionStore } from '@/store/attributionStore'
+import AttributionConfig from '@/pages/PaperGeneration/components/AttributionConfig'
 
 const paperGeneration = () => {
+  const openDrawer = useAttributionStore(state => state.openDrawer)
+  const closeDrawer = useAttributionStore(state => state.closeDrawer)
+  const isOpen = useAttributionStore(state => state.isOpen)
   return (
     <div className={styles.Container}>
       <Controller />
@@ -13,6 +19,9 @@ const paperGeneration = () => {
         }}
       ></div>
       <Generator />
+      <Drawer title="Basic Drawer" open={isOpen} onClose={closeDrawer}>
+        <AttributionConfig></AttributionConfig>
+      </Drawer>
     </div>
   )
 }

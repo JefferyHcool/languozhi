@@ -7,6 +7,7 @@ interface TemplateState {
   template: GenerationTemplate | null
   templates: GenerationTemplate[] // 存储已保存模板
   createTemplate: () => void
+  isExist: (id: string) => boolean
   setTemplate: (newTemplate: GenerationTemplate) => void
   updateTemplate: (updates: Partial<GenerationTemplate>) => void
   saveTemplate: () => void
@@ -47,10 +48,20 @@ export const useTemplateStore = create<TemplateState>()(
       saveTemplate: () => {
         set(state => {
           if (!state.template) return {}
+          const res = state.templates.find(t => t.id === state.template?.id)
+          if (res) {
+            return {
+              templates: state.templates.map(t => (t.id === state.template?.id ? { ...t, ...state.template } : t))
+            }
+          }
           return {
             templates: [...state.templates, state.template]
           }
         })
+      },
+
+      isExist: (id: string) => {
+        return get().templates.some(t => t.id === id)
       },
 
       // 根据 ID 加载模板

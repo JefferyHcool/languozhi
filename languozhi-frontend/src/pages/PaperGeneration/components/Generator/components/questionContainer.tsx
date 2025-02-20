@@ -2,6 +2,7 @@ import { FC, useState } from 'react'
 import { useTemplateStore } from '@/store/templateStore'
 import { QuestionTypeCN } from '@/enums/questionEnums'
 import { Button } from 'antd'
+import { useAttributionStore } from '@/store/attributionStore'
 
 const QuestionContainer: FC = () => {
   const numberMap: Record<number, string> = {
@@ -19,6 +20,7 @@ const QuestionContainer: FC = () => {
 
   const [showButton, setShowButton] = useState<Set<number>>(new Set()) // 使用 Set 存储显示按钮的索引
   const { template } = useTemplateStore()
+  const openDrawer = useAttributionStore(state => state.openDrawer)
 
   const handleMouseEnter = (index: number) => {
     setShowButton(prev => new Set(prev.add(index))) // 鼠标进入时加入该索引
@@ -31,11 +33,15 @@ const QuestionContainer: FC = () => {
       return newSet
     })
   }
+  const handleClick = () => {
+    openDrawer()
+  }
 
   return (
     <div className="text-sm space-y-4">
       {template?.questionConfig.type.map((item, index) => (
         <div
+          onClick={handleClick}
           key={item}
           onMouseEnter={() => handleMouseEnter(index)}
           onMouseLeave={() => handleMouseLeave(index)}
@@ -44,7 +50,7 @@ const QuestionContainer: FC = () => {
           <p className="font-semibold">{`${numberMap[index + 1]}、${QuestionTypeCN[item as keyof typeof QuestionTypeCN] ?? '未知题型'}`}</p>
           <div className={`flex justify-center ${showButton.has(index) ? 'block' : 'hidden'}`}>
             {/* 控制每个索引是否显示按钮 */}
-            {showButton.has(index) && <Button>生成题目</Button>}
+            {showButton.has(index) && <Button onClick={event => event.stopPropagation()}>生成题目</Button>}
           </div>
         </div>
       ))}
