@@ -1,7 +1,7 @@
 import { Form, Input, Radio, Tag, Tooltip } from 'antd'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
-const questionForm: FC = () => {
+const questionForm: FC<ControllerProps> = ({ template, updateTemplate }) => {
   const questionType = [
     {
       label: '听力',
@@ -54,16 +54,31 @@ const questionForm: FC = () => {
     { label: 'C1', value: 'c1' },
     { label: 'C2', value: 'c2' }
   ]
-
+  const [form] = Form.useForm()
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const handleChange = (tag: string, checked: boolean) => {
     const nextSelectedTags = checked ? [...selectedTags, tag] : selectedTags.filter(t => t !== tag)
+    if (template) {
+      updateTemplate({
+        questionConfig: {
+          type: nextSelectedTags,
+          difficulty: template.questionConfig.difficulty
+        }
+      })
+    }
 
     setSelectedTags(nextSelectedTags)
   }
+
+  useEffect(() => {
+    if (template) {
+      setSelectedTags(template.questionConfig.type || []) // ✅ 直接更新 state
+    }
+  }, [template])
+
   return (
     <div>
-      <Form layout={'vertical'}>
+      <Form layout={'vertical'} form={form}>
         <Form.Item className={'font-semibold'} label="题目类型" name="title" tooltip={'请选择需要生成的题目类型'}>
           {questionType.map<React.ReactNode>(tag => (
             <Tag.CheckableTag

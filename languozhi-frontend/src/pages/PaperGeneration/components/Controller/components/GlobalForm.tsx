@@ -1,6 +1,7 @@
 import { Form, Input, Select } from 'antd'
+import { FC } from 'react'
 
-const GlobalForm = () => {
+const GlobalForm: FC<ControllerProps> = ({ template, updateTemplate }) => {
   const onChange = (value: string) => {
     console.log(`selected ${value}`)
   }

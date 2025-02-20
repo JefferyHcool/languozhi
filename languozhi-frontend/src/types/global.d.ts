@@ -29,15 +29,14 @@ declare module '*.less' {
   export default content
 }
 
-interface GenerateTemplate {
+interface GenerationTemplate {
+  id: string
   templateName: string
   baseInfo: {
     title: string
-    time: number
-    score: number
   }
   questionConfig: {
-    type: string
+    type: string[]
     difficulty: string
   }
   globalConfig: {
