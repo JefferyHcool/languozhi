@@ -1,9 +1,10 @@
 import { Form, Input } from 'antd'
 import { FC, useEffect } from 'react'
+import { useTemplateStore } from '@/store/templateStore'
 
 const BaseForm: FC<ControllerProps> = ({ template, updateTemplate }) => {
   const [form] = Form.useForm()
-
+  const createQuestion = useTemplateStore(state => state)
   // 只依赖 template，避免不必要的 re-render
   useEffect(() => {
     form.setFieldsValue({

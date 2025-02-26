@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { generateName, generatePaperName } from '@/utils/template'
 import { nanoid } from 'nanoid' // 生成唯一 ID
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { GenerationTemplate, IQuestion } from '@/types/global'
 
 interface TemplateState {
   template: GenerationTemplate | null
@@ -12,6 +13,7 @@ interface TemplateState {
   updateTemplate: (updates: Partial<GenerationTemplate>) => void
   saveTemplate: () => void
   loadTemplateById: (id: string) => void
+  createQuestion: (question: IQuestion) => void
 }
 
 export const useTemplateStore = create<TemplateState>()(
@@ -23,11 +25,12 @@ export const useTemplateStore = create<TemplateState>()(
       // 生成一个新的模板
       createTemplate: () => {
         const newTemplate: GenerationTemplate = {
-          id: nanoid(), // 生成唯一 ID
+          id: nanoid(),
           templateName: generateName(),
           baseInfo: { title: generatePaperName() },
           questionConfig: { type: [], difficulty: '' },
-          globalConfig: { model: 'DeepSeek-V2.5' }
+          globalConfig: { model: 'DeepSeek-V2.5' },
+          questions: [] // 确保 questions 不是 undefined
         }
         set({ template: newTemplate })
       },
@@ -35,6 +38,19 @@ export const useTemplateStore = create<TemplateState>()(
       // 直接设置模板
       setTemplate: newTemplate => {
         set({ template: newTemplate })
+      },
+
+      createQuestion: (question: IQuestion) => {
+        set(state => {
+          if (!state.template) return {}
+
+          return {
+            template: {
+              ...state.template,
+              questions: [...state.template.questions, question] // 这里 questions 现在一定是数组
+            }
+          }
+        })
       },
 
       // 局部更新当前模板

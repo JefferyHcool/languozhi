@@ -33,15 +33,16 @@ const QuestionContainer: FC = () => {
       return newSet
     })
   }
-  const handleClick = () => {
-    openDrawer()
+  const handleClick = (item: any) => {
+    console.log(item)
+    openDrawer(item)
   }
 
   return (
     <div className="text-sm space-y-4">
       {template?.questionConfig.type.map((item, index) => (
         <div
-          onClick={handleClick}
+          onClick={e => handleClick(item)}
           key={item}
           onMouseEnter={() => handleMouseEnter(index)}
           onMouseLeave={() => handleMouseLeave(index)}

@@ -100,17 +100,18 @@ export const loginWithPhone = async (data: { phone_number: string; verification_
       }
     })
     .then(res => {
+      debugger
       const { access_token, refresh_token, user_info } = res.data
-      if (res && res.user_info) {
+      if (res.data && res.data.user_info) {
         localStorage.setItem('token', access_token)
         localStorage.setItem('access_token', access_token)
         localStorage.setItem('refresh_token', refresh_token)
         localStorage.setItem('user_info', JSON.stringify(user_info))
         message.success('登录成功')
-        return Promise.resolve(res)
+        Promise.resolve(res)
+      } else {
+        message.error('登录失败：' + res)
+        return Promise.reject(res)
       }
-
-      message.error('登录失败：' + res)
-      return Promise.reject(res)
     })
 }

@@ -4,11 +4,11 @@ import Generator from '@/pages/PaperGeneration/components/Generator'
 import { Drawer } from 'antd'
 import { useAttributionStore } from '@/store/attributionStore'
 import AttributionConfig from '@/pages/PaperGeneration/components/AttributionConfig'
+import { QuestionTypeCN } from '@/enums/questionEnums'
 
 const paperGeneration = () => {
-  const openDrawer = useAttributionStore(state => state.openDrawer)
-  const closeDrawer = useAttributionStore(state => state.closeDrawer)
-  const isOpen = useAttributionStore(state => state.isOpen)
+  const { currentItem, openDrawer, closeDrawer, isOpen } = useAttributionStore()
+
   return (
     <div className={styles.Container}>
       <Controller />
@@ -19,7 +19,7 @@ const paperGeneration = () => {
         }}
       ></div>
       <Generator />
-      <Drawer title="Basic Drawer" open={isOpen} onClose={closeDrawer}>
+      <Drawer title={QuestionTypeCN[currentItem as keyof typeof QuestionTypeCN]} open={isOpen} onClose={closeDrawer}>
         <AttributionConfig></AttributionConfig>
       </Drawer>
     </div>
